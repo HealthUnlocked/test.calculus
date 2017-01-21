@@ -79,3 +79,7 @@ Here are some that have been defined using prismatic schema generators:
     {:forum_id (:forum_id forum)
      :user_id  (:user_id user)}))
 ```
+
+## Developing test.calculus
+
+`test.calculus` uses `docker-compose` to provision a test database. Run `docker-compose up -d` (or `make up`) to start it in the background, then `lein repl`. The port of the dockerized mysql will be automatically injected into the project's `env` using `lein-docker-compose`.
