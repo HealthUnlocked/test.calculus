@@ -1,0 +1,10 @@
+mysql:
+  image: mysql:5.7
+  ports:
+    - "3306"
+  volumes:
+    - "./dev/resources/my.cnf:/etc/mysql/my.cnf"
+    - "./dev/resources/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
+    - "./tmp/mysql:/var/lib/mysql"
+  environment:
+    - MYSQL_ROOT_PASSWORD=password
