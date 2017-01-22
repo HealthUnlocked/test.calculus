@@ -1,4 +1,4 @@
-(ns test.calculus
+(ns healthunlocked.test.calculus
   (:require [clojure.java.jdbc :as jdbc]
             [clojure.string :as str]
             [clojure.test :as t]
@@ -41,7 +41,7 @@
   [k]
   (let [{:keys [generator table]} (fixture-conf k)]
     (gen/fmap
-      #(vary-meta % assoc :test.calculus/table table)
+      #(vary-meta % assoc ::table table)
       (gen/no-shrink generator))))
 
 (defn fixtures-gen
@@ -58,9 +58,9 @@
 
 (defn save-fixtures!
   [db & records]
-  (doseq [records-of-type (partition-by (comp :test.calculus/table meta) records)]
+  (doseq [records-of-type (partition-by (comp ::table meta) records)]
     (jdbc/insert-multi! db
-                        (-> records-of-type first meta :test.calculus/table sql-quote)
+                        (-> records-of-type first meta ::table sql-quote)
                         records-of-type)))
 
 (defmacro integration-test
@@ -115,4 +115,4 @@
     [[_ a & bs] extra-records]
     [(cons a bs)
      (concat extra-records
-             (map #(vary-meta (f a %) assoc :test.calculus/table table) bs))]))
+             (map #(vary-meta (f a %) assoc ::table table) bs))]))

@@ -9,7 +9,7 @@
             [example.users.schemas :refer [User]]
             [schema.core :as s]
             [schema-generators.generators :as sgen]
-            [test.calculus :as tc]))
+            [healthunlocked.test.calculus :as tc]))
 
 (extend-protocol jdbc/ISQLValue
   java.util.Date

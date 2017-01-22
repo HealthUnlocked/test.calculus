@@ -1,6 +1,6 @@
-(defproject test.calculus "0.1.0-SNAPSHOT"
+(defproject healthunlocked/test.calculus "0.1.0-SNAPSHOT"
   :description "Integration tests using test.check"
-  :url "http://github.com/rsslldnphy/test.calculus"
+  :url "http://github.com/healthunlocked/test.calculus"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[com.gfredericks/test.chuck "0.2.7"]

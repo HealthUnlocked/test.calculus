@@ -4,7 +4,7 @@
             [environ.core :refer [env]]
             [example.forums.handlers :as h]
             [example.test.helper :as th]
-            [test.calculus :as tc]))
+            [healthunlocked.test.calculus :as tc]))
 
 (tc/use-test-db th/test-db)
 
