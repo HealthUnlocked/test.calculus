@@ -1,6 +1,9 @@
 # test.calculus
 
+![image](https://cloud.githubusercontent.com/assets/1231200/22187314/277cc7b0-e0fc-11e6-9f5d-b543636425a8.png)
+
 Generative integration tests using test.check. Tries to simplify the process of setting up and persisting test data.
+
 
 ## Rationale
 
