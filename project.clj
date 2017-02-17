@@ -1,4 +1,4 @@
-(defproject healthunlocked/test.calculus "0.1.0-SNAPSHOT"
+(defproject healthunlocked/test.calculus "0.1.0"
   :description "Integration tests using test.check"
   :url "http://github.com/healthunlocked/test.calculus"
   :license {:name "Eclipse Public License"
