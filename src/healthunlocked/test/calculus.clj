@@ -44,11 +44,11 @@
       #(vary-meta % assoc ::table table)
       (gen/no-shrink generator))))
 
-(defn fixtures-gen
-  [k n]
-  (let [generator            (fixture-gen k)
-        {:keys [unique-key]} (fixture-conf k)]
-    (gen/vector-distinct-by unique-key generator {:num-elements n})))
+(defn enforce-uniqueness
+  [k & ms]
+  (let [{:keys [unique-key]} (fixture-conf k)]
+    (gen/fmap (partial map (fn [m id] (assoc m unique-key id)) ms)
+              (gen/vector-distinct gen/s-pos-int {:num-elements (count ms)}))))
 
 (defn- sql-quote
   [k]
@@ -64,6 +64,7 @@
                         records-of-type)))
 
 (defmacro integration-test
+  "I'm going to go to hell for this."
   [description attempts fixtures & relationships+generators+tests]
 
   (let [[relationships+generators tests]
@@ -83,11 +84,29 @@
         (gensym "extra-records-")
 
         records-to-save
-        (flatten (filter vector? fixtures))]
+        (take-nth 2 (mapcat second (partition 2 fixtures)))]
 
     `(chuck/checking ~description (chuck/times ~attempts)
-       [~@(mapcat (juxt second (fn [[k bindings]] `(fixtures-gen ~k ~(count bindings))))
+       [
+
+        ;; first, let the specified names using basic, unadorned generators
+        ~@(apply concat (for [[k bindings] (partition 2 fixtures)
+                              [b m]        (partition 2 bindings)]
+                          [b `(fixture-gen ~k)]))
+
+        ;; then, assoc in any fields that should be unique to avoid clashes
+        ~@(mapcat (juxt (comp vec (partial take-nth 2) second)
+                        (fn [[k bindings]]
+                          `(enforce-uniqueness ~k ~@(take-nth 2 bindings))))
                   (partition 2 fixtures))
+
+        ;; finally, assoc in the specified default values
+        ~@(mapcat (juxt (comp vec (partial take-nth 2) second)
+                        (fn [[k bindings]]
+                          `(gen/return (map merge [~@(take-nth 2 bindings)]
+                                                  [~@(take-nth 2 (rest bindings))]))))
+                  (partition 2 fixtures))
+
         ~@generators]
 
        (let [~extra-records-binding []
